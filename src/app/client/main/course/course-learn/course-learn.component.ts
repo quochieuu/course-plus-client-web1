@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Course } from 'src/app/shared/models/course';
 import { CourseLecture } from 'src/app/shared/models/course-lecture';
@@ -22,6 +22,7 @@ export class CourseLearnComponent implements OnInit {
   slug!: string;
   lecId!: string;
   lecUrl!: string;
+  courseName!: string;
   urlSafe!: SafeResourceUrl;
 
   private apiURL = environment.apiUrl;
@@ -30,8 +31,11 @@ export class CourseLearnComponent implements OnInit {
   constructor(
     public courseService: CourseService,
     private route: ActivatedRoute,
-    public sanitizer: DomSanitizer
-  ) { }
+    public sanitizer: DomSanitizer,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle("Lớp học - Course Plus");
+   }
 
   ngOnInit(): void {
     this.slug = this.route.snapshot.params['slug'];
@@ -46,6 +50,8 @@ export class CourseLearnComponent implements OnInit {
       .subscribe((data: any) => {
         console.log(data);
         this.course = data;
+        this.courseName = data.name;
+        this.titleService.setTitle(this.courseName + " - Course Plus");
       });
   }
 
@@ -57,6 +63,7 @@ export class CourseLearnComponent implements OnInit {
         this.lecture = data;
         this.lecUrl = data.urlYoutubeVideo;
         this.urlSafe= this.sanitizer.bypassSecurityTrustResourceUrl(this.lecUrl);
+        this.titleService.setTitle(this.lecture.name + " - " + this.courseName + " - Course Plus");
       });
   }
 

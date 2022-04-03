@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { BookService } from 'src/app/shared/services/book.service';
 import { environment } from 'src/environments/environment';
 
@@ -16,8 +17,14 @@ export class ListBooksComponent implements OnInit {
   baseUrl: string = this.apiURL;
 
   books: any = [];
+  topBooks: any = [];
 
-  constructor(public bookService: BookService) { }
+  constructor(
+    public bookService: BookService,
+    private titleService: Title
+    ) {
+      this.titleService.setTitle("Danh sách sách - Course Plus");
+     }
 
   ngOnInit(): void {
     this.getBooks();
@@ -29,6 +36,7 @@ export class ListBooksComponent implements OnInit {
       .subscribe((data: any) => {
         console.log(data);
         this.books = data;
+        this.topBooks = data.slice(0, 3);
       });
   }
 

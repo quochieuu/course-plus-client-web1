@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BookService } from 'src/app/shared/services/book.service';
 import { environment } from 'src/environments/environment';
@@ -26,8 +27,11 @@ export class IndexComponent implements OnInit {
   constructor(
     private router: Router,
     private ngZone: NgZone,
-    public bookService: BookService
-  ) {}
+    public bookService: BookService,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle("Quản lý sách - Course Plus Admin");
+  }
 
   ngOnInit(): void {
     this.getPage(this.p, this.pageSize, this.query);

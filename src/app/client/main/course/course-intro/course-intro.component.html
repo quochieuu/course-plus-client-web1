@@ -1,6 +1,23 @@
 <!-- Main Contents -->
 <div class="main_content">
 
+  <!-- modal called  -->
+  <ng-template #mymodal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Video giới thiệu khoá học</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <form>
+    <div class="modal-body">
+      <div class="embed-video">
+        <iframe [src]="urlSafe" frameborder="0" allowfullscreen uk-responsive></iframe>
+    </div>
+    </div>
+  </form>
+  </ng-template>
+  <!-- end modal called  -->
     <!-- course preview details -->
     <div class="bg-gradient-to-tr from-pink-500 to-red-500 text-white">
         <div class="container p-0">
@@ -9,16 +26,16 @@
                 <div class="lg:w-4/12">
                     <div class="w-full h-40 overflow-hidden rounded-lg relative lg:mb-0 mb-4">
                         <img src="{{baseUrl}}/courses/images/{{course.urlImage}}" alt="{{ course.name }}" class="w-full h-full absolute inset-0 object-cover">
-                        <a href="#trailer-modal" class="uk-position-center" uk-toggle>
+                        <a (click)="open(mymodal)" class="uk-position-center">
                             <img src="./../../../../../assets/client/assets/images/icon-play.svg" class="w-16 h-16" alt="{{ course.name }}">
                         </a>
                     </div>
                 </div>
                 <div class="lg:w-8/12">
-                     
+
                     <h1 class="lg:leading-10 lg:text-2xl text-white text-xl leading-8 font-semibold">{{ course.name }}</h1>
                     <p class="line-clamp-2 mt-3 md:block hidden lmline"> {{ course.description }} </p>
-    
+
                     <ul class="flex text-gray-100 gap-4 mt-4 mb-1">
                         <li class="flex items-center">
                             <span class="avg bg-yellow-500 mr-2 px-2 rounded text-white font-semiold" *ngIf="course.price > 0"> {{ course.price }} </span>
@@ -29,12 +46,12 @@
                                 <i name="star-half"></i>
                             </div> -->
                         </li>
-                        <li> <i name="people-circle-outline" *ngIf="course.originalPrice > 0"></i> {{ course.originalPrice }} </li>
+                        <li *ngIf="course.originalPrice > 1"> <i name="people-circle-outline" ></i> {{ course.originalPrice }} </li>
                     </ul>
                     <ul class="lg:flex text-gray-100">
-                        <li> Created by <a href="#" class="text-white fond-bold hover:underline hover:text-white"> Stella Johnson </a> </li>
+                        <li> Tác giả: <a href="#" class="text-white fond-bold hover:underline hover:text-white"> <b>CoursePlus Academy</b> </a> </li>
                         <span class="lg:block hidden mx-3 text-2xl">·</span>
-                        <li> Last updated {{ course.createdDate }}</li>
+                        <!-- <li> Last updated {{ course.createdDate }}</li> -->
                     </ul>
 
                 </div>
@@ -45,12 +62,12 @@
 
     <!--  course tabs -->
     <div class="bg-white border-b z-20 mb-4 overflow-hidden" uk-sticky="media: 992; offset:70">
-        <div class="mcontainer py-0 lg:px-20 flex justify-between items-center"> 
+        <div class="mcontainer py-0 lg:px-20 flex justify-between items-center">
 
             <nav class="cd-secondary-nav nav-smal l flex-1">
                 <ul class="space-x-3" uk-scrollspy-nav="closest: li; scroll: true">
                     <li><a href="#Overview" uk-scroll>Overview</a></li>
-                    <li><a href="#curriculum" uk-scroll>Curriculum</a></li> 
+                    <li><a href="#curriculum" uk-scroll>Curriculum</a></li>
                     <li><a href="#faq" uk-scroll>FAQ</a></li>
                     <li><a href="#announcement">Announcement</a></li>
                     <li><a href="#reviews">Reviews</a></li>
@@ -62,14 +79,14 @@
                 <a href="course-watch.html" class="flex items-center justify-center h-9 px-6 rounded-md bg-blue-600 text-white"> Enroll Now </a>
                 <a routerLink="/course/learn/{{course.slug}}/{{course.sections[0].courseLectures[0].id}}" class="flex items-center justify-center h-9 px-6 rounded-md bg-blue-600 text-white"> Learn </a>
             </div>
-             
+
         </div>
     </div>
 
     <div class="container p-0">
 
         <div class="space-y-5 lg:w-9/12 mx-auto">
-                
+
             <!-- course description -->
             <div class="tube-card p-5 lg:p-8" id="Overview">
 
@@ -86,7 +103,7 @@
                             <!-- {{ course.content }} -->
                         </div>
                     </div>
-                    
+
                 </div>
 
             </div>
@@ -112,11 +129,11 @@
                 </ul>
             </div>
 
-            <!-- course Faq --> 
+            <!-- course Faq -->
             <div class="tube-card p-5 lg:p-8" id="faq">
-                    
+
                 <h3 class="text-xl font-semibold mb-3 lg:mb-5"> Course Faq </h3>
-                
+
                 <ul uk-accordion="multiple: true" class="divide-y space-y-3">
                     <li class="bg-gray-100 px-4 py-3 rounded-md uk-close" *ngFor="let faq of course.courseFaqs">
                         <a class="uk-accordion-title font-semibold text-base" href="#"> {{ faq.title }} </a>
@@ -131,11 +148,11 @@
             <!-- course Announcement -->
             <div  id="announcement" class="tube-card p-5 lg:p-8">
                 <h3 class="text-xl font-semibold lg:mb-5"> Thông báo từ tác giả </h3>
-                
+
                 <div class="flex items-center gap-x-4 mb-5">
                     <img src="./../../../../../assets/client/assets/images/avatars/avatar-4.jpg" alt="" class="rounded-full shadow w-12 h-12">
                     <div>
-                        <h4 class="-mb-1 text-base  font-semibold"> Stella Johnson</h4>
+                        <h4 class="-mb-1 text-base  font-semibold"> CoursePlus Academy</h4>
                         <span class="text-sm"> Instructor <span class="text-gray-500"> 1 year ago </span> </span>
                     </div>
                 </div>
@@ -145,12 +162,12 @@
                 </div>
 
             </div>
-         
-             
+
+
             <!-- course Reviews -->
             <div  id="reviews" class="tube-card p-5">
                 <h3 class="text-xl font-semibold mb-3"> Reviews (4610) </h3>
-                
+
                 <div class="flex space-x-5 mb-8">
                     <div class="lg:w-1/4 w-full">
                         <div class="bg-blue-100 p-6 rounded-md border border-blue-200 text-center shadow-xs">
@@ -291,9 +308,9 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="space-y-4 my-5">
-        
+
                     <div class="bg-gray-50 border flex gap-x-4 p-4 relative rounded-md">
                         <img src="./../../../../../assets/client/assets/images/avatars/avatar-4.jpg" alt="" class="rounded-full shadow w-12 h-12">
                         <div class="flex justify-center items-center absolute right-5 top-6 space-x-1 text-yellow-500">
@@ -313,7 +330,7 @@
                             </p>
                         </div>
                     </div>
-                
+
                     <div class="bg-gray-50 border flex gap-x-4 p-4 relative rounded-md">
                         <div class="flex justify-center items-center absolute right-5 top-6 space-x-1 text-yellow-500">
                             <i name="star"></i>
@@ -351,7 +368,7 @@
                             </p>
                         </div>
                     </div>
-                
+
                 </div>
 
                 <div class="flex justify-center mt-9">
@@ -364,5 +381,5 @@
         </div>
 
     </div>
-    
+
 </div>

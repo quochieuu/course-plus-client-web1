@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { CourseService } from '../course.service';
@@ -27,8 +28,11 @@ export class ListCoursesComponent implements OnInit {
   constructor(
     private router: Router,
     private ngZone: NgZone,
-    public courseService: CourseService
-  ) {}
+    public courseService: CourseService,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle("Danh sách khoá học - Course Plus");
+  }
 
   ngOnInit(): void {
     this.getPage(this.p, this.pageSize, this.query);

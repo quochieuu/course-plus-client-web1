@@ -96,23 +96,23 @@ export class CreateComponent implements OnInit {
   onFileChange(event: any) {
     const reader = new FileReader();
     this.selectedFile = event.target.files[0];
-    
+
     if(event.target.files && event.target.files.length) {
       const [file] = event.target.files;
       reader.readAsDataURL(file);
-    
+
       reader.onload = () => {
-   
+
         this.imageSrc = reader.result as string;
 
         this.isImageChange = true;
-     
+
         this.myForm.patchValue({
           fileSource: reader.result
         });
-   
+
       };
-   
+
     }
   }
 
@@ -129,7 +129,7 @@ export class CreateComponent implements OnInit {
 
     swalWithBootstrapButtons
       .fire({
-        text: 'Xác nhận thêm mới tin tức?',
+        text: 'Xác nhận thêm mới sách?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Xác nhận',

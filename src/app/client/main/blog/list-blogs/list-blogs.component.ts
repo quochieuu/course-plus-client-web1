@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { BlogService } from 'src/app/shared/services/blog.service';
 import { environment } from 'src/environments/environment';
 
@@ -17,19 +18,26 @@ export class ListBlogsComponent implements OnInit {
   baseUrl: string = this.apiURL;
 
   blogs: any = [];
+  topBlogs: any = [];
 
-  constructor(public blogService: BlogService) { }
+  constructor(
+    public blogService: BlogService,
+    private titleService: Title
+    ) {
+      this.titleService.setTitle("Tin tức mới nhất - Course Plus");
+     }
 
   ngOnInit(): void {
-    this.getBooks();
+    this.getBlogs();
   }
 
-  getBooks() {
+  getBlogs() {
     this.blogService
       .getAll()
       .subscribe((data: any) => {
         console.log(data);
         this.blogs = data;
+        this.topBlogs = data.slice(0, 4);
       });
   }
 

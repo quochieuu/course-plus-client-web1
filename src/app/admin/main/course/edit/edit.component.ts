@@ -121,33 +121,33 @@ export class EditComponent implements OnInit {
     }
   }
 
-  // End modal 
+  // End modal
 
   get f(){
     return this.myForm.controls;
   }
 
-  // update image 
+  // update image
   onFileChange(event: any) {
     const reader = new FileReader();
     this.selectedFile = event.target.files[0];
-    
+
     if(event.target.files && event.target.files.length) {
       const [file] = event.target.files;
       reader.readAsDataURL(file);
-    
+
       reader.onload = () => {
-   
+
         this.imageSrc = reader.result as string;
 
         this.isImageChange = true;
-     
+
         this.myForm.patchValue({
           fileSource: reader.result
         });
-   
+
       };
-   
+
     }
   }
 
@@ -158,18 +158,22 @@ export class EditComponent implements OnInit {
     this.courseService.createImage(this.id, formData).subscribe(res => {
       console.log(res)
       this.getData();
+      this.modalService.dismissAll();
       this.ngZone.run(() =>
-      this.router.navigateByUrl('admin/course/update/'+this.id)
-    );
+        this.router.navigateByUrl('admin/course/update/'+this.id)
+      );
+
+
     }, (err) => {
       this.getData();
       this.ngZone.run(() =>
         this.router.navigateByUrl('admin/course/update/'+this.id)
       );
+      this.modalService.dismissAll();
     });
   }
 
-  // End update image 
+  // End update image
 
   getCategories(): void {
     this.courseService
@@ -202,7 +206,7 @@ export class EditComponent implements OnInit {
       })
       .then((result) => {
         if (result.isConfirmed) {
-          
+
           this.courseService.update(this.id, this.item).subscribe(
             () => {
               this.ngZone.run(() =>

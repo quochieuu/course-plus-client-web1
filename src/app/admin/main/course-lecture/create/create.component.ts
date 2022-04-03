@@ -1,3 +1,4 @@
+import { CourseService } from './../../../../client/main/course/course.service';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +16,7 @@ import { CourseLectureService } from '../../../../shared/services/course-lecture
 export class CreateComponent implements OnInit {
   createForm!: FormGroup;
   sectionId!: string;
+  courseSlug!: string;
   section: any;
 
   lectureType = [{
@@ -46,13 +48,16 @@ export class CreateComponent implements OnInit {
     private router: Router,
     private ngZone: NgZone,
     private route: ActivatedRoute,
-    private courseLectureService: CourseLectureService
+    private courseLectureService: CourseLectureService,
+    public courseService: CourseService,
   ) { }
 
 
   ngOnInit(): void {
     this.sectionId = this.route.snapshot.params['id'];
     this.getSection(this.sectionId)
+
+
 
     this.createForm = this.formBuilder.group({
       sectionId: this.sectionId,
@@ -71,6 +76,17 @@ export class CreateComponent implements OnInit {
     this.courseLectureService.getSection(id).subscribe(
       (data) => {
         this.section = data;
+        this.getCourse(this.section.courseId);
+        console.log(data)
+      },
+      (error) => console.log(error)
+    );
+  }
+
+  getCourse(id: string): void {
+    this.courseService.find(id).subscribe(
+      (data) => {
+        this.courseSlug = data.slug;
         console.log(data)
       },
       (error) => console.log(error)
@@ -102,7 +118,7 @@ export class CreateComponent implements OnInit {
           this.courseLectureService.create(this.createForm.value).subscribe(
             () => {
               this.ngZone.run(() =>
-                this.router.navigateByUrl('admin/course-lecture/' + this.section.id)
+                this.router.navigateByUrl('admin/course-section/' + this.courseSlug)
               );
             },
             (err:any) => {

@@ -1,6 +1,6 @@
 <h1 class="my-6 text-lg font-bold text-gray-700 dark:text-gray-300">Cập nhật khóa học</h1>
 <h3 class="my-6 text-lg font-bold text-gray-400 mt-0 dark:text-gray-300">Chỉnh sửa thông tin khóa học cơ bản</h3>
-   
+
 <ng-template #mymodal let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Cập nhật ảnh khóa học</h4>
@@ -10,21 +10,21 @@
   </div>
   <form (ngSubmit)="submitCreateImage()">
   <div class="modal-body">
-    
+
         <label class="block text-gray-700 text-sm font-bold mb-2">Ảnh khóa học</label>
-          <input 
+          <input
               formControlName="file"
-              id="file" 
-              type="file" 
+              id="file"
+              type="file"
               class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:-outline"
               (change)="onFileChange($event)" />
               <small>Vui lòng upload định dạng (.jpg, .jpeg hoặc .png)</small>
 
               <img [src]="imageSrc" *ngIf="imageSrc">
-    
+
   </div>
   <div class="modal-footer">
-    <button type="submit" class="rounded-md inline-block align-baseline text-sm text-white bg-green-500 hover:text-blue-800 px-4 py-1" (click)="modal.close('Save click')">Cập nhật</button>
+    <button type="submit" class="rounded-md inline-block align-baseline text-sm text-white bg-green-500 hover:text-blue-800 px-4 py-1">Cập nhật</button>
   </div>
 </form>
 </ng-template>
@@ -32,12 +32,12 @@
 <div class="container">
 
     <form (ngSubmit)="onSubmit()" class="hct-form">
-      
+
     <div class="flex">
         <div class="w-2/3">
             <div class="row justify-content-center mt-5">
                 <div class="col-md-4i">
-                  
+
                     <div class="mb-4">
                       <label class="block text-gray-700 text-sm font-bold mb-2">Tiêu đề</label>
                       <input
@@ -45,7 +45,7 @@
                         type="text" [(ngModel)]="item.name" name="name" required placeholder="Nhập tiêu đề khóa học">
                         <small>Hãy nhập tiêu đề trên 50 ký tự để người dùng dễ dàng tìm kiếm khóa học của bạn.</small>
                     </div>
-                    
+
                     <div class="mb-4">
                       <label class="block text-gray-700 text-sm font-bold mb-2">Mô tả ngắn</label>
                       <textarea
@@ -53,7 +53,7 @@
                         type="text" [(ngModel)]="item.description" name="description" required rows="5"></textarea>
                         <small>Nhập mô tả để người dùng hiểu hơn và chọn khóa học của bạn.</small>
                     </div>
-            
+
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Link giới thiệu khóa học (Youtube)</label>
                         <input
@@ -61,7 +61,7 @@
                           type="text" [(ngModel)]="item.urlYoutubeVideo" name="urlYoutubeVideo" required>
                           <small>Nếu bạn upload video giới thiệu lên có thể bỏ qua trường này.</small>
                       </div>
-            
+
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Thông báo về khóa học</label>
                         <!-- <textarea
@@ -70,7 +70,7 @@
                           <angular-editor [(ngModel)]="item.announcement" name="announcement" [config]="editorConfig2"></angular-editor>
                           <small>Thêm một vài thông báo về khóa học (nếu có, ví dụ thời gian bắt đầu khóa học,..)</small>
                       </div>
-            
+
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Nội dung khóa học</label>
                         <!-- <textarea
@@ -79,7 +79,7 @@
                           <angular-editor [(ngModel)]="item.content" name="content" [config]="editorConfig"></angular-editor>
                           <small>Nhập giới thiệu chi tiết về khóa học của bạn.</small>
                       </div>
-            
+
                     <div class="mb-4">
                       <button
                         class="rounded-md inline-block align-baseline text-sm text-white bg-green-500 hover:text-blue-800 px-4 py-1"
@@ -125,7 +125,7 @@
                           type="number" [(ngModel)]="item.originalPrice" name="originalPrice" required>
                         <small>Trước khi hình thành giá bán, giá gốc trước giảm giá bao nhiêu. Hãy để giá trị <b>0</b> khi <b>không có giá gốc.</b></small>
                       </div>
-            
+
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Đơn vị giá</label>
                           <select [(ngModel)]="item.priceUnit" name="priceUnit" class=" appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:-outline">
@@ -133,7 +133,7 @@
                           </select>
                           <small>Chọn đơn vị tiền tệ phù hợp với giá khóa học của bạn.</small>
                       </div>
-            
+
                       <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Ngày bắt đầu khóa học</label>
                         <input

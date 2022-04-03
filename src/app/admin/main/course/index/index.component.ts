@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
@@ -21,11 +22,17 @@ export class IndexComponent implements OnInit {
   query: string = '';
   baseUrl: string = this.apiURL;
 
+  showTab = 0;
+  isHide = 0;
+
   constructor(
     private router: Router,
     private ngZone: NgZone,
-    public courseService: CourseService
-  ) {}
+    public courseService: CourseService,
+    private titleService: Title
+  ) {
+    this.titleService.setTitle("Danh sách khoá học - Course Plus Admin");
+  }
 
   ngOnInit(): void {
     this.getPage(this.p, this.pageSize, this.query);
@@ -56,6 +63,16 @@ export class IndexComponent implements OnInit {
         this.courses = data.items;
         this.totalItems = data.totalRecords;
       });
+  }
+
+  tabToggle(index: number){
+    this.showTab = index;
+    this.isHide = index;
+  }
+
+  tabCancel(){
+    this.showTab = 0;
+    this.isHide = 0;
   }
 
   delete(id: string): void {

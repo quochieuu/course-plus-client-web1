@@ -1,6 +1,5 @@
 import { CourseLecture } from './../../../../shared/models/course-lecture';
-import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,13 +19,21 @@ import { CourseLectureService } from 'src/app/shared/services/course-lecture.ser
 export class IndexComponent implements OnInit {
 
   item: CourseSection[] = [];
+  secItem: CourseSection | any;
+
   course: Course | any;
   courseSection: CourseSection | any;
   courseLecture: CourseLecture | any;
   slug!: string;
   data!: {};
+  secData!: {};
+
+  showTab = 0;
+  isHide = 0;
+  createSecSubmitted = false;
 
   createForm!: FormGroup;
+  updateSectionForm!: FormGroup;
   courseId!: string;
 
   closeResult: string | undefined;
@@ -38,7 +45,6 @@ export class IndexComponent implements OnInit {
     private ngZone: NgZone,
     private courseSectionService: CourseSectionService,
     private titleService: Title,
-    private modalService: NgbModal,
     private courseLectureService: CourseLectureService)
     {
       this.titleService.setTitle("Quản lý chương trình giảng dạy - Course Plus Admin");
@@ -49,17 +55,24 @@ export class IndexComponent implements OnInit {
     this.getData(this.slug);
     this.getCourse(this.slug);
 
-    console.log("Start get");
-    console.log(this.courseId);
-
     this.createForm = this.formBuilder.group({
+      courseId: [''],
+      name: ['', [Validators.required, Validators.minLength(10)]],
+      description: [''],
+    });
+
+    this.updateSectionForm = this.formBuilder.group({
       courseId: [''],
       name: [''],
       description: [''],
     });
+
   }
 
 
+  get f(){
+    return this.createForm.controls;
+  }
 
   getData(slug:string):void {
     this.courseSectionService.getByCourseSlug(slug).subscribe(
@@ -110,10 +123,9 @@ export class IndexComponent implements OnInit {
               (item: { id: string }) => item.id !== id
             );
           });
-          this.getData(this.slug);
-          this.getData(this.slug);
-          this.getData(this.slug);
-          this.getData(this.slug);
+          for (let i = 0; i < 4; i++) {
+            this.getData(this.slug);
+          }
 
           swalWithBootstrapButtons.fire('Xóa thành công!');
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -123,6 +135,7 @@ export class IndexComponent implements OnInit {
   }
 
   onSubmit(): any {
+    this.createSecSubmitted = true;
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton:
@@ -132,7 +145,7 @@ export class IndexComponent implements OnInit {
       },
       buttonsStyling: false,
     });
-
+    if(this.f.name.errors == null) {
     swalWithBootstrapButtons
       .fire({
         text: 'Xác nhận thêm mới section?',
@@ -156,7 +169,7 @@ export class IndexComponent implements OnInit {
               for (let i = 0; i < 2; i++) {
                 this.getData(this.slug);
               }
-              this.modalService.dismissAll();
+              this.tabCancel();
 
             },
             (err) => {
@@ -169,28 +182,18 @@ export class IndexComponent implements OnInit {
           swalWithBootstrapButtons.fire('Hủy thành công!');
         }
       });
-  }
-
-  // Modal
-  open(content: any) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
     }
   }
 
-  // End modal
+  tabToggle(index: number){
+    this.showTab = index;
+    this.isHide = index;
+  }
+
+  tabCancel(){
+    this.showTab = 0;
+    this.isHide = 0;
+  }
 
   deleteLecture(id: string): void {
     const swalWithBootstrapButtons = Swal.mixin({
@@ -226,6 +229,52 @@ export class IndexComponent implements OnInit {
           }
 
           swalWithBootstrapButtons.fire('Xóa thành công!');
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          swalWithBootstrapButtons.fire('Hủy thành công!');
+        }
+      });
+  }
+
+  onSubmitUpdateSection(id: string) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton:
+          'btn btn-success',
+        cancelButton:
+          'btn btn-default',
+      },
+      buttonsStyling: false,
+    });
+
+    swalWithBootstrapButtons
+      .fire({
+        text: 'Xác nhận chỉnh sửa section?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Xác nhận',
+        cancelButtonText: 'Hủy',
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.secData = {
+            'courseId' : this.courseId,
+            'name' : this.updateSectionForm.value.name,
+            'description': this.updateSectionForm.value.description
+          }
+          this.courseSectionService.update(id, this.secData).subscribe(
+            () => {
+              for (let i = 0; i < 4; i++) {
+                this.getData(this.slug);
+              }
+              this.tabCancel();
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
+
+          swalWithBootstrapButtons.fire('Cập nhật thành công!');
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           swalWithBootstrapButtons.fire('Hủy thành công!');
         }

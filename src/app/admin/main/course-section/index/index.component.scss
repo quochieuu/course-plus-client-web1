@@ -346,3 +346,34 @@ a.curriculum-list--add-item--1DK2G.add-item--add-item-toggler--1k-rh.add-item--l
   margin-left: 5px!important;
   margin-bottom: 5px!important;
 }
+
+input.sec-live-edit {
+  border: 1px dashed #7d8184;
+  border-radius: 3px;
+  padding: 0 7px;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: auto;
+}
+
+input.sec-live-submit {
+  background: #10b981;
+  color: #fff;
+  font-weight: 500;
+  font-size: 11px;
+  padding: 4px 8px;
+  border: 1px solid #81ffd5;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+input.sec-live-cancel {
+  background: #9d9d9d;
+  color: #fff;
+  font-weight: 500;
+  font-size: 11px;
+  padding: 4px 8px;
+  border: 1px solid #bcbcbc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
