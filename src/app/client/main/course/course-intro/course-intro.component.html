@@ -38,7 +38,7 @@
 
                     <ul class="flex text-gray-100 gap-4 mt-4 mb-1">
                         <li class="flex items-center">
-                            <span class="avg bg-yellow-500 mr-2 px-2 rounded text-white font-semiold" *ngIf="course.price > 0"> {{ course.price }} </span>
+                            <span class="avg bg-yellow-500 mr-2 px-2 rounded text-white font-semiold" *ngIf="course.price > 0"> {{ course.price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}) }} </span>
                             <span class="avg bg-yellow-500 mr-2 px-2 rounded text-white font-semiold" *ngIf="course.price == 0"> Miễn Phí </span>
                             <!-- <div class="star-rating text-yellow-200">
                                 <i name="star"></i> <i name="star"></i>
@@ -46,10 +46,10 @@
                                 <i name="star-half"></i>
                             </div> -->
                         </li>
-                        <li *ngIf="course.originalPrice > 1"> <i name="people-circle-outline" ></i> {{ course.originalPrice }} </li>
+                        <li *ngIf="course.originalPrice > 1"> <i name="people-circle-outline" ></i> {{ course.originalPrice.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}) }} </li>
                     </ul>
                     <ul class="lg:flex text-gray-100">
-                        <li> Tác giả: <a href="#" class="text-white fond-bold hover:underline hover:text-white"> <b>CoursePlus Academy</b> </a> </li>
+                        <li> Tác giả: <a href="#" class="text-white fond-bold hover:underline hover:text-white"> <b>Course Plus Academy</b> </a> </li>
                         <span class="lg:block hidden mx-3 text-2xl">·</span>
                         <!-- <li> Last updated {{ course.createdDate }}</li> -->
                     </ul>
@@ -75,9 +75,10 @@
             </nav>
 
             <div class="flex space-x-3">
-                <a href="#" class="flex items-center justify-center h-9 px-6 rounded-md bg-gray-100"> Add to Wishlist </a>
-                <a href="course-watch.html" class="flex items-center justify-center h-9 px-6 rounded-md bg-blue-600 text-white"> Enroll Now </a>
-                <a routerLink="/course/learn/{{course.slug}}/{{course.sections[0].courseLectures[0].id}}" class="flex items-center justify-center h-9 px-6 rounded-md bg-blue-600 text-white"> Learn </a>
+                <a href="#" class="flex items-center justify-center h-9 px-6 rounded-md bg-gray-100"> Lưu Khoá Học </a>
+                <a *ngIf="isInCourse == false && course.price == 0" (click)="registerCourse(course.id)" style="cursor: pointer;" class="flex items-center justify-center h-9 px-6 rounded-md bg-blue-600 text-white"> Đăng Ký Học </a>
+                <a *ngIf="isInCourse == false && course.price > 0" (click)="addToCart(course.id)" style="cursor: pointer;" class="flex items-center justify-center h-9 px-6 rounded-md bg-blue-600 text-white"> Thêm Vào Giỏ Hàng </a>
+                <a *ngIf="isInCourse == true" routerLink="/course/learn/{{course.slug}}/{{course.sections[0].courseLectures[0].id}}" class="flex items-center justify-center h-9 px-6 rounded-md bg-blue-600 text-white"> Tiếp Tục Học </a>
             </div>
 
         </div>

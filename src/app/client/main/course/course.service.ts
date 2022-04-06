@@ -13,7 +13,17 @@ export class CourseService {
   private apiURL = environment.apiUrl;
   currentUser: any;
   httpOptions: {};
+  httpOptionsAuth: {};
   constructor(private httpClient: HttpClient) {
+    this.currentUser = JSON.parse(sessionStorage.getItem('auth-user') || '{}');
+
+      this.httpOptionsAuth = {
+          headers: new HttpHeaders({
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.currentUser.accessToken}`
+          })
+      };
+
       this.httpOptions = {
           headers: new HttpHeaders({
               'Content-Type': 'application/json',
@@ -78,5 +88,20 @@ export class CourseService {
   delete(id: string) {
       return this.httpClient
           .delete<Course>(this.apiURL + '/api/course/delete/' + id, this.httpOptions)
+  }
+
+  registerCourse(id: string) {
+    return this.httpClient
+              .get<any>(this.apiURL + '/api/course/register-course/' + id, this.httpOptionsAuth)
+  }
+
+  checkUserInCourse(id: string) {
+    return this.httpClient
+              .get<any>(this.apiURL + '/api/course/check-user-in-course/' + id, this.httpOptionsAuth)
+  }
+
+  listUsersOfCourse(id: string) {
+    return this.httpClient
+              .get<any>(this.apiURL + '/api/course/list-users-of-course/' + id, this.httpOptionsAuth)
   }
 }

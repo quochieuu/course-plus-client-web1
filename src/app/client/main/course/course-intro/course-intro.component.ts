@@ -3,6 +3,7 @@ import { DomSanitizer, SafeResourceUrl, Title } from '@angular/platform-browser'
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Course } from 'src/app/shared/models/course';
+import { CartService } from 'src/app/shared/services/cart.service';
 import { environment } from 'src/environments/environment';
 import { CourseService } from '../course.service';
 
@@ -24,11 +25,14 @@ export class CourseIntroComponent implements OnInit {
   urlSafe!: SafeResourceUrl;
   introUrl!: string;
 
+  isInCourse!: boolean;
+
   private apiURL = environment.apiUrl;
   baseUrl: string = this.apiURL;
 
   constructor(
     public courseService: CourseService,
+    public cartService: CartService,
     private route: ActivatedRoute,
     private modalService: NgbModal,
     public sanitizer: DomSanitizer,
@@ -38,6 +42,7 @@ export class CourseIntroComponent implements OnInit {
   ngOnInit(): void {
     this.slug = this.route.snapshot.params['slug'];
     this.getCourseDetail(this.slug);
+
   }
 
   // Modal
@@ -70,7 +75,33 @@ export class CourseIntroComponent implements OnInit {
         this.titleService.setTitle(this.course.name + " - Course Plus");
         this.introUrl = data.urlYoutubeVideo;
         this.urlSafe= this.sanitizer.bypassSecurityTrustResourceUrl(this.introUrl);
+
+        this.checkUserInCourse(this.course.id);
       });
+  }
+
+  addToCart(id: string) {
+    this.cartService.addItemToCart(id)
+    .subscribe((data: any) => {
+      console.log("Add ok");
+      this.getCourseDetail(this.slug);
+    });
+  }
+
+  registerCourse(id: string) {
+    this.courseService.registerCourse(id)
+    .subscribe((data: any) => {
+      console.log("Register ok");
+      this.getCourseDetail(this.slug);
+    });
+  }
+
+  checkUserInCourse(id: string) {
+    this.courseService.checkUserInCourse(id)
+    .subscribe((data: any) => {
+      this.isInCourse = data;
+      console.log(this.isInCourse);
+    });
   }
 
 }

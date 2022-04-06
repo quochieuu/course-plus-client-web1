@@ -75,4 +75,19 @@ export class CourseService {
       return this.httpClient
           .delete<Course>(this.apiURL + '/api/course/delete/' + id, this.httpOptions)
   }
+
+  registerCourse(id: string) {
+    return this.httpClient
+              .get<any>(this.apiURL + '/api/course/register-course/' + id, this.httpOptions)
+  }
+
+  checkUserInCourse(id: string) {
+    return this.httpClient
+              .get<any>(this.apiURL + '/api/course/check-user-in-course/' + id, this.httpOptions)
+  }
+
+  listUsersOfCourse(id: string) {
+    return this.httpClient
+              .get<any>(this.apiURL + '/api/course/list-users-of-course/' + id, this.httpOptions)
+  }
 }
