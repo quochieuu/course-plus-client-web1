@@ -1,4 +1,4 @@
-<header class="is-transparent is-dark border-b backdrop-filter backdrop-blur-2xl" uk-sticky="cls-inactive: is-dark is-transparent border-b"> 
+<header class="backdrop-filter backdrop-blur-2xl uk-sticky uk-sticky-fixed uk-active uk-sticky-below" uk-sticky="cls-inactive: is-dark is-transparent border-b">
     <div class="header_inner">
         <div class="left-side">
 
@@ -19,41 +19,41 @@
         <div class="right-side">
 
             <!-- Header search box  -->
-            <div class="header_search"><i class="uil-search-alt"></i> 
+            <div class="header_search"><i class="uil-search-alt"></i>
                 <input value="" type="text" class="form-control" placeholder=" Quick search for anything.." autocomplete="off">
                 <div uk-drop="mode: click;offset:10" class="header_search_dropdown">
-                       
+
                     <h4 class="search_title"> Recently </h4>
                     <ul>
-                        <li> 
-                            <a href="#">  
+                        <li>
+                            <a href="#">
                                 <img src="./../../../../../assets/client/assets/images/avatars/avatar-1.jpg" alt="" class="list-avatar">
                                 <div class="list-name">  Erica Jones </div>
-                            </a> 
-                        </li> 
-                        <li> 
-                            <a href="#">  
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
                                 <img src="./../../../../../assets/client/assets/images/avatars/avatar-2.jpg" alt="" class="list-avatar">
                                 <div class="list-name">  Coffee  Addicts </div>
-                            </a> 
+                            </a>
                         </li>
-                        <li> 
-                            <a href="#">  
+                        <li>
+                            <a href="#">
                                 <img src="./../../../../../assets/client/assets/images/avatars/avatar-3.jpg" alt="" class="list-avatar">
                                 <div class="list-name"> Mountain Riders </div>
-                            </a> 
+                            </a>
                         </li>
-                        <li> 
-                            <a href="#">  
+                        <li>
+                            <a href="#">
                                 <img src="./../../../../../assets/client/assets/images/avatars/avatar-4.jpg" alt="" class="list-avatar">
                                 <div class="list-name"> Property Rent And Sale  </div>
-                            </a> 
+                            </a>
                         </li>
-                        <li> 
-                            <a href="#">  
+                        <li>
+                            <a href="#">
                                 <img src="./../../../../../assets/client/assets/images/avatars/avatar-5.jpg" alt="" class="list-avatar">
                                 <div class="list-name">  Erica Jones </div>
-                            </a> 
+                            </a>
                         </li>
                     </ul>
 
@@ -66,7 +66,7 @@
                 <a href="#" class="header_widgets">
                     <i name="cart-outline" class="fa fa-shopping-cart is-icon"></i>
                 </a>
-                <div uk-drop="mode: click" class="dropdown_cart">
+                <div uk-drop="mode: click" class="dropdown_cart" style="right: 30px">
                     <h4 class="cart-headline"> My Cart </h4>
                     <ul class="dropdown_cart_scrollbar" data-simplebar>
                         <li>
@@ -153,7 +153,7 @@
                 <a href="#" class="header_widgets">
                     <i name="mail-outline" class="fa fa-globe is-icon"></i>
                 </a>
-                <div uk-drop="mode: click" class="header_dropdown"> 
+                <div uk-drop="mode: click" class="header_dropdown">
                     <div class="drop_headline">
                         <h4>Notifications </h4>
                         <div class="btn_action">
@@ -311,7 +311,7 @@
                     <img src="./../../../../../assets/client/assets/images/avatars/placeholder.png" class="header_widgets_avatar" alt="">
                 </a>
                 <div uk-drop="mode: click;offset:5" class="header_dropdown profile_dropdown">
-                    <ul>   
+                    <ul>
                         <li *ngIf="userData != null">
                             <a routerLink="/profile" class="user">
                                 <div class="user_avatar">
@@ -323,64 +323,64 @@
                                 </div>
                             </a>
                         </li>
-                        <!-- <li> 
+                        <!-- <li>
                             <hr>
                         </li> -->
-                        <!-- <li> 
+                        <!-- <li>
                             <a href="#" class="is-link">
                                 <i name="rocket-outline" class="is-icon"></i> <span>  Upgrade Membership  </span>
                             </a>
                         </li>  -->
-                        <li> 
+                        <li>
                             <hr>
                         </li>
-                        <li> 
+                        <li>
                             <a routerLink="/login" *ngIf="userData == null">
                                 <i name="person-circle-outline" class="is-icon"></i>
-                                 Login 
+                                 Login
                             </a>
                         </li>
-                        <li> 
+                        <li>
                             <a routerLink="/register" *ngIf="userData == null">
                                 <i name="person-circle-outline" class="is-icon"></i>
-                                 Register 
+                                 Register
                             </a>
                         </li>
-                        <li *ngIf="userData != null"> 
+                        <li *ngIf="userData != null">
                             <a routerLink="/profile">
                                 <i name="person-circle-outline" class="is-icon"></i>
-                                 Dashboard 
+                                 Dashboard
                             </a>
                         </li>
-                        <li *ngIf="userData != null"> 
+                        <li *ngIf="userData != null">
                             <a routerLink="/profile/update-profile">
                                 <i name="card-outline" class="is-icon"></i>
                                 My Account
                             </a>
                         </li>
-                        <li *ngIf="userData != null"> 
+                        <li *ngIf="userData != null">
                             <a href="#">
                                 <i name="color-wand-outline" class="is-icon"></i>
-                                My Billing 
+                                My Billing
                             </a>
                         </li>
                         <li *ngIf="userData != null">
                             <a href="#">
                                 <i name="settings-outline" class="is-icon"></i>
-                                Account Settings  
+                                Account Settings
                             </a>
                         </li>
-                        <li> 
+                        <li>
                             <hr>
                         </li>
-                        <li *ngIf="userData != null"> 
+                        <li *ngIf="userData != null">
                             <a href="#" (click)="logOut()">
                                 <i name="log-out-outline" class="is-icon"></i>
-                                Log Out 
+                                Log Out
                             </a>
                         </li>
                     </ul>
-                </div> 
+                </div>
 
             </div>
 

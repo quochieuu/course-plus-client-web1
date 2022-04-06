@@ -7,6 +7,14 @@ export const environment = {
   apiUrl: 'https://localhost:5001',
   TOKEN_KEY: 'auth-token',
   USER_KEY: 'auth-user',
+  wsEndpoint: 'ws://localhost:4200/',
+  RTCPeerConfiguration: {
+    iceServers: [
+      {
+        urls: 'stun:stun1.l.google.com:19302'
+      }
+    ]
+  }
 };
 
 /*
