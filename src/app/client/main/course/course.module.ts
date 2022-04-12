@@ -7,6 +7,7 @@ import { ListCategoriesComponent } from './list-categories/list-categories.compo
 import { CourseIntroComponent } from './course-intro/course-intro.component';
 import { CourseLearnComponent } from './course-learn/course-learn.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { AngularToastifyModule, ToastService } from 'angular-toastify';
 
 
 @NgModule({
@@ -20,6 +21,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     CommonModule,
     CourseRoutingModule,
     NgxPaginationModule,
-  ]
+    AngularToastifyModule
+  ],
+  providers: [ToastService]
 })
 export class CourseModule { }

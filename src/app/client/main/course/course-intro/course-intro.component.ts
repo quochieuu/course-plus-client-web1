@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { ToastService } from 'angular-toastify';
 import { Course } from 'src/app/shared/models/course';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { environment } from 'src/environments/environment';
@@ -33,6 +34,7 @@ export class CourseIntroComponent implements OnInit {
   constructor(
     public courseService: CourseService,
     public cartService: CartService,
+    private _toastService: ToastService,
     private route: ActivatedRoute,
     private modalService: NgbModal,
     public sanitizer: DomSanitizer,
@@ -83,7 +85,7 @@ export class CourseIntroComponent implements OnInit {
   addToCart(id: string) {
     this.cartService.addItemToCart(id)
     .subscribe((data: any) => {
-      console.log("Add ok");
+      this.addInfoToast("Đã thêm khoá học vào giỏ hàng của bạn!");
       this.getCourseDetail(this.slug);
     });
   }
@@ -91,7 +93,7 @@ export class CourseIntroComponent implements OnInit {
   registerCourse(id: string) {
     this.courseService.registerCourse(id)
     .subscribe((data: any) => {
-      console.log("Register ok");
+      this.addInfoToast("Đăng ký khoá học thành công! Bây giờ bạn có thể tham gia học khoá học này.")
       this.getCourseDetail(this.slug);
     });
   }
@@ -102,6 +104,10 @@ export class CourseIntroComponent implements OnInit {
       this.isInCourse = data;
       console.log(this.isInCourse);
     });
+  }
+
+  addInfoToast(message: string) {
+    this._toastService.info(message);
   }
 
 }

@@ -80,3 +80,15 @@ body.modal-popup-open {
   padding-top: 10px;
 }
 
+.toast {
+  font-size: initial !important;
+  border: initial !important;
+  backdrop-filter: blur(0) !important;
+  opacity: 1!important;
+}
+
+
+.toast {
+  border-radius: 15px!important;
+  overflow: hidden;
+}

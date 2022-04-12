@@ -17,12 +17,16 @@
     </div>
   </form>
   </ng-template>
+
+
   <!-- end modal called  -->
     <!-- course preview details -->
     <div class="bg-gradient-to-tr from-pink-500 to-red-500 text-white cint">
         <div class="container p-0">
             <div class="lg:flex items-center lg:space-x-12 lg:py-10 lg:px-8 p-4">
-
+              <lib-toastify-toast-container [autoClose]="3000"
+              [iconLibrary]="'font-awesome'"
+              ></lib-toastify-toast-container>
                 <div class="lg:w-4/12">
                     <div class="w-full h-40 overflow-hidden rounded-lg relative lg:mb-0 mb-4">
                         <img src="{{baseUrl}}/courses/images/{{course.urlImage}}" alt="{{ course.name }}" class="w-full h-full absolute inset-0 object-cover">

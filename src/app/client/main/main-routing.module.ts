@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'book', loadChildren: () => import('./book/book.module').then(m => m.BookModule)  },
   { path: 'chat', canActivate: [ClientAuthGuard], loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule)  },
   { path: 'profile', canActivate: [ClientAuthGuard], loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)  },
+  { path: 'order', canActivate: [ClientAuthGuard], loadChildren: () => import('./order/order.module').then(m => m.OrderModule)  },
   { path: 'meeting', loadChildren: () => import('./meeting/meeting.module').then(m => m.MeetingModule)  },
   { path: 'cart', component: CartComponent },
 ];
