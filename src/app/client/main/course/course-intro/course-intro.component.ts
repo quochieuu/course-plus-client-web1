@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { WishlistService } from './../../../../shared/services/wishlist.service';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -7,6 +9,7 @@ import { Course } from 'src/app/shared/models/course';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { environment } from 'src/environments/environment';
 import { CourseService } from '../course.service';
+import { ServerService } from 'src/app/shared/services/server.service';
 
 @Component({
   selector: 'app-course-intro',
@@ -19,6 +22,7 @@ import { CourseService } from '../course.service';
 })
 export class CourseIntroComponent implements OnInit {
   course: Course | any;
+  feedbacks!: any;
   slug!: string;
 
   closeResult: string | undefined;
@@ -28,17 +32,23 @@ export class CourseIntroComponent implements OnInit {
 
   isInCourse!: boolean;
 
+  isLogin = false;
+
   private apiURL = environment.apiUrl;
   baseUrl: string = this.apiURL;
 
   constructor(
     public courseService: CourseService,
+    public wishlistService: WishlistService,
     public cartService: CartService,
     private _toastService: ToastService,
     private route: ActivatedRoute,
     private modalService: NgbModal,
     public sanitizer: DomSanitizer,
-    private titleService: Title
+    private titleService: Title,
+    public serverService: ServerService,
+    private router: Router,
+    private ngZone: NgZone,
   ) { }
 
   ngOnInit(): void {
@@ -77,8 +87,8 @@ export class CourseIntroComponent implements OnInit {
         this.titleService.setTitle(this.course.name + " - Course Plus");
         this.introUrl = data.urlYoutubeVideo;
         this.urlSafe= this.sanitizer.bypassSecurityTrustResourceUrl(this.introUrl);
+        this.checkAuthorize();
 
-        this.checkUserInCourse(this.course.id);
       });
   }
 
@@ -88,6 +98,25 @@ export class CourseIntroComponent implements OnInit {
       this.addInfoToast("Đã thêm khoá học vào giỏ hàng của bạn!");
       this.getCourseDetail(this.slug);
     });
+  }
+
+  requireLogin() {
+    if(this.isLogin == false) {
+      this.ngZone.run(() => this.router.navigateByUrl('/login'));
+    }
+  }
+
+  addToWishlist(id: string) {
+    if(this.isLogin == false) {
+      this.ngZone.run(() => this.router.navigateByUrl('/login'));
+    } else {
+      this.wishlistService.create(id)
+      .subscribe((data: any) => {
+        this.addInfoToast("Lưu khoá học thành công!");
+        this.getCourseDetail(this.slug);
+      });
+    }
+
   }
 
   registerCourse(id: string) {
@@ -108,6 +137,27 @@ export class CourseIntroComponent implements OnInit {
 
   addInfoToast(message: string) {
     this._toastService.info(message);
+  }
+
+  getFeedbacks(courseId: string) {
+    this.courseService.getFeedbacks(courseId)
+    .subscribe((data: any) => {
+      this.feedbacks = data;
+      console.log(this.feedbacks);
+    });
+  }
+
+  checkAuthorize() {
+    this.serverService
+      .checkAuthorize()
+      .subscribe((data: any) => {
+        console.log(data);
+        this.isLogin = true;
+        this.checkUserInCourse(this.course.id);
+      },
+      (err: any) => {
+        this.isLogin = false;
+      });
   }
 
 }

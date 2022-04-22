@@ -33,6 +33,33 @@
                           <input type="checkbox" id="use_points" />
                           <label for="use_points" class="text-sm"><span class="checkbox-icon"></span> I agree to the <a target="_blank" href="#" class="font-semibold">Terms and Conditions</a> </label>
                       </div> -->
+                      <p>Chọn phương thức thanh toán</p>
+                      <br/>
+                      <br/>
+
+                  </div>
+                  <div class="choose-payment-method">
+                      <div class="d-flex method-item">
+                        <input type="radio" id="vnpay" formControlName="paymentMethod" name="payment_method" [value]="0" checked>
+                        <label for="vnpay">
+                          <span>Thanh toán bằng VNPay</span>
+                          <img src="./../../../../../assets/client/assets/images/vnpay.png" alt="">
+                        </label>
+                      </div>
+                      <div class="d-flex method-item">
+                        <input type="radio" id="vnpay" formControlName="paymentMethod" name="payment_method" [value]="1">
+                        <label for="vnpay">
+                          <span>Thanh toán bằng MoMo</span>
+                          <img src="./../../../../../assets/client/assets/images/momo.png" alt="">
+                        </label>
+                      </div>
+                      <div class="d-flex method-item">
+                        <input type="radio" id="vnpay" formControlName="paymentMethod" name="payment_method" [value]="2">
+                        <label for="vnpay">
+                          <span>Thanh toán bằng Paypal</span>
+                          <img src="./../../../../../assets/client/assets/images/paypal.png" alt="">
+                        </label>
+                      </div>
                   </div>
               </div>
           </div>

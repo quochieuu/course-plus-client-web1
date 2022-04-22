@@ -15,6 +15,9 @@ const routes: Routes = [
   { path: 'blog', loadChildren: () => import('./blog/blog.module').then(m => m.BlogModule) },
   { path: 'book', loadChildren: () => import('./book/book.module').then(m => m.BookModule) },
   { path: 'book-category', loadChildren: () => import('./book-category/book-category.module').then(m => m.BookCategoryModule) },
+  { path: 'quiz', loadChildren: () => import('./quiz/quiz.module').then(m => m.QuizModule) },
+  { path: 'systems', loadChildren: () => import('./systems/systems.module').then(m => m.SystemsModule) },
+  { path: 'user', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
 
 ];
 

@@ -1,4 +1,4 @@
-<header class="backdrop-filter backdrop-blur-2xl uk-sticky uk-sticky-fixed uk-active uk-sticky-below" uk-sticky="cls-inactive: is-dark is-transparent border-b">
+<header class="backdrop-filter backdrop-blur-2xl uk-sticky uk-sticky-fixed uk-active uk-sticky-below" uk-sticky=" is-dark is-transparent border-b">
     <div class="header_inner">
         <div class="left-side">
 
@@ -150,7 +150,7 @@
                 </div>
 
                 <!-- notification -->
-                <a href="#" class="header_widgets">
+                <!-- <a href="#" class="header_widgets">
                     <i name="mail-outline" class="fa fa-globe is-icon"></i>
                 </a>
                 <div uk-drop="mode: click" class="header_dropdown">
@@ -222,14 +222,14 @@
                         </li>
                     </ul>
                     <a href="#" class="see-all">See all</a>
-                </div>
+                </div> -->
 
                 <!-- messages -->
-                <a href="#" class="header_widgets">
+                <!-- <a href="#" class="header_widgets">
                     <i name="notifications-outline" class="fa fa-comments is-icon"></i>
                     <span> 2 </span>
-                </a>
-                <div uk-drop="mode: click" class="header_dropdown">
+                </a> -->
+                <!-- <div uk-drop="mode: click" class="header_dropdown">
                     <div class="drop_headline">
                         <h4>Messages </h4>
                         <div class="btn_action">
@@ -304,18 +304,25 @@
                         </li>
                     </ul>
                     <a href="#" class="see-all">See all</a>
-                </div>
+                </div> -->
 
                  <!-- profile -->
-                <a href="#">
-                    <img src="./../../../../../assets/client/assets/images/avatars/placeholder.png" class="header_widgets_avatar" alt="">
+                <a href="#" class="authtopbar">
+                    <img *ngIf="userData == null" src="./../../../../../assets/client/assets/images/avatars/placeholder.png" class="header_widgets_avatar" alt="">
+                    <img *ngIf="userData != null && userData.avatarUrl != null" src="{{baseUrl}}/users/avatars/{{userData.avatarUrl}}" class="header_widgets_avatar" alt="">
+                    <img *ngIf="userData != null && userData.avatarUrl == null" src="./../../../../../assets/client/assets/images/avatars/placeholder.png" class="header_widgets_avatar" alt="">
+                    <span *ngIf="userData == null">Đăng Nhập</span>
+                    <span *ngIf="userData != null">{{ userData.fullName }}</span>
                 </a>
                 <div uk-drop="mode: click;offset:5" class="header_dropdown profile_dropdown">
                     <ul>
                         <li *ngIf="userData != null">
                             <a routerLink="/profile" class="user">
                                 <div class="user_avatar">
-                                    <img src="./../../../../../assets/client/assets/images/avatars/avatar-2.jpg" alt="">
+                                    <!-- <img src="./../../../../../assets/client/assets/images/avatars/avatar-2.jpg" alt=""> -->
+                                    <img *ngIf="userData == null" src="./../../../../../assets/client/assets/images/avatars/placeholder.png" alt="">
+                                  <img *ngIf="userData != null && userData.avatarUrl != null" src="{{baseUrl}}/users/avatars/{{userData.avatarUrl}}" alt="">
+                                  <img *ngIf="userData != null && userData.avatarUrl == null" src="./../../../../../assets/client/assets/images/avatars/placeholder.png" alt="">
                                 </div>
                                 <div class="user_name">
                                     <div> {{ userData.fullName }} </div>
@@ -337,52 +344,64 @@
                         <li>
                             <a routerLink="/login" *ngIf="userData == null">
                                 <i name="person-circle-outline" class="is-icon"></i>
-                                 Login
+                                 Đăng Nhập
                             </a>
                         </li>
                         <li>
                             <a routerLink="/register" *ngIf="userData == null">
                                 <i name="person-circle-outline" class="is-icon"></i>
-                                 Register
+                                 Đăng Ký
                             </a>
                         </li>
                         <li *ngIf="userData != null">
                             <a routerLink="/profile">
                                 <i name="person-circle-outline" class="is-icon"></i>
-                                 Dashboard
+                                 Trang Tổng Quan
                             </a>
                         </li>
                         <li *ngIf="userData != null">
                             <a routerLink="/profile/update-profile">
                                 <i name="card-outline" class="is-icon"></i>
-                                My Account
+                                Cập Nhật Tài Khoản
                             </a>
                         </li>
                         <li *ngIf="userData != null">
                           <a routerLink="/order/my-order">
                               <i name="card-outline" class="is-icon"></i>
-                              My Orders
+                              Đơn Hàng Của Bạn
                           </a>
                       </li>
                         <li *ngIf="userData != null">
                             <a href="#">
                                 <i name="color-wand-outline" class="is-icon"></i>
-                                My Billing
+                                Thông Tin Thanh Toán
                             </a>
                         </li>
                         <li *ngIf="userData != null">
                             <a href="#">
                                 <i name="settings-outline" class="is-icon"></i>
-                                Account Settings
+                                Trắc Nghiệm Đã Tham Gia
                             </a>
                         </li>
+                        <li *ngIf="userData != null">
+                          <a routerLink="/profile/wishlist">
+                              <i name="settings-outline" class="is-icon"></i>
+                              Khoá học đã lưu
+                          </a>
+                      </li>
+                        <li *ngIf="userData != null">
+                          <a routerLink="/profile/change-password">
+                              <i name="settings-outline" class="is-icon"></i>
+                              Đổi Mật Khẩu
+                          </a>
+                      </li>
                         <li>
                             <hr>
                         </li>
                         <li *ngIf="userData != null">
                             <a href="#" (click)="logOut()">
                                 <i name="log-out-outline" class="is-icon"></i>
-                                Log Out
+                                Đăng Xuất
                             </a>
                         </li>
                     </ul>

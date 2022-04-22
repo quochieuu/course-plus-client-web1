@@ -1,3 +1,4 @@
+import { PaymentService } from './../../../../shared/services/payment.service';
 import { CartService } from './../../../../shared/services/cart.service';
 import { Title } from '@angular/platform-browser';
 import { AccountService } from './../../../../shared/services/account.service';
@@ -30,6 +31,7 @@ export class CheckoutComponent implements OnInit {
       private orderService: OrderService,
       private ngZone: NgZone,
       private accountService: AccountService,
+      private paymentService: PaymentService,
       public cartService: CartService,
       private titleService: Title
     ) {
@@ -40,7 +42,8 @@ export class CheckoutComponent implements OnInit {
       orderEmail: [''],
       orderPhone: [''],
       orderName: [''],
-      orderStatus: 0
+      orderStatus: 0,
+      paymentMethod: null,
     });
   }
 
@@ -67,12 +70,22 @@ export class CheckoutComponent implements OnInit {
       });
   }
 
+  createPayment(id: string) {
+    this.paymentService
+      .createPayment(id)
+      .subscribe((data: any) => {
+        console.log(data);
+        window.location.href = data.payUrl;
+      });
+  }
+
   onSubmit(): any {
     this.orderService.createOrder(this.createForm.value)
     .subscribe((data: any) => {
-      this.ngZone.run(() =>
-        this.router.navigateByUrl('admin/order/payment')
-      );
+      this.createPayment(data.id)
+      // this.ngZone.run(() =>
+      //   this.router.navigateByUrl('/')
+      // );
     });
   }
 

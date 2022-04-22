@@ -14,6 +14,9 @@ const routes: Routes = [
   { path: 'profile', canActivate: [ClientAuthGuard], loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)  },
   { path: 'order', canActivate: [ClientAuthGuard], loadChildren: () => import('./order/order.module').then(m => m.OrderModule)  },
   { path: 'meeting', loadChildren: () => import('./meeting/meeting.module').then(m => m.MeetingModule)  },
+  { path: 'payment', loadChildren: () => import('./payment/payment.module').then(m => m.PaymentModule)  },
+  { path: 'quiz', loadChildren: () => import('./quiz/quiz.module').then(m => m.QuizModule)  },
+  { path: 'error', loadChildren: () => import('./errors/errors.module').then(m => m.ErrorsModule)  },
   { path: 'cart', component: CartComponent },
 ];
 

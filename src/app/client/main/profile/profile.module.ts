@@ -9,6 +9,7 @@ import { WishlistComponent } from './wishlist/wishlist.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AngularToastifyModule, ToastService } from 'angular-toastify';
 
 
 @NgModule({
@@ -25,6 +26,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NgxPaginationModule,
     FormsModule,
     ReactiveFormsModule,
-  ]
+    AngularToastifyModule
+  ],
+  providers: [ToastService]
 })
 export class ProfileModule { }

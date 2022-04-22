@@ -24,6 +24,7 @@ export class ListCoursesComponent implements OnInit {
   pageSizes = [10, 15, 20];
   query: string = '';
   baseUrl: string = this.apiURL;
+  loadingCategory = false;
 
   constructor(
     private router: Router,
@@ -67,11 +68,15 @@ export class ListCoursesComponent implements OnInit {
   }
 
   getCategories() {
+    this.loadingCategory = true;
     this.courseService
       .getCategories()
       .subscribe((data: any) => {
         console.log(data);
         this.categories = data;
+        this.loadingCategory = false;
+      }, () => {
+        this.loadingCategory = true;
       });
   }
 

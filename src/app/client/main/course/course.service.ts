@@ -104,4 +104,9 @@ export class CourseService {
     return this.httpClient
               .get<any>(this.apiURL + '/api/course/list-users-of-course/' + id, this.httpOptionsAuth)
   }
+
+  getFeedbacks(id: string) {
+    return this.httpClient
+              .get<any>(this.apiURL + '/api/course-feedback/get-by-course/' + id, this.httpOptions)
+  }
 }

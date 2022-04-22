@@ -2,37 +2,33 @@
 <div class="main_content">
     <div class="container">
 
-        <h3 class="text-2xl font-medium mb-5"> General Setting </h3>
+        <h3 class="text-2xl font-medium mb-5"> Thiết Lập </h3>
 
         <nav class="cd-secondary-nav border-b md:m-0 -mx-4 nav-small">
             <ul>
-                <li><a routerLink="/" class="lg:px-2">General </a></li>
-                <li class="active"><a routerLink="/profile" class="lg:px-2"> Profile </a></li>
-                <li><a href="#" class="lg:px-2"> Privacy </a></li>
-                <li><a href="#" class="lg:px-2"> Notification </a></li>
-                <li><a href="#" class="lg:px-2"> Social links </a></li>
-                <li><a href="#" class="lg:px-2"> Billing </a></li>
-                <li><a href="#" class="lg:px-2"> Change password </a></li>
+                <li class="active"><a routerLink="/" class="lg:px-2">Thông tin cá nhân </a></li>
+                <li><a routerLink="/profile/change-password" class="lg:px-2"> Đổi mật khẩu </a></li>
+                <li><a href="#" class="lg:px-2"> Thông tin thanh toán </a></li>
             </ul>
         </nav>
-        
+
         <!-- Basic information -->
         <div class="grid lg:grid-cols-3 gap-8 md:mt-12">
             <div>
                 <div uk-sticky="offset:100;bottom:true;media:992">
                     <h3 class="text-lg mb-2 font-semibold"> Thông tin</h3>
-                    <p> Cập nhật thông tin cở bản của bạn</p>
+                    <p> Cập nhật thông tin cơ bản của bạn</p>
                 </div>
             </div>
             <div class="bg-white rounded-md lg:shadow-md shadow col-span-2">
-
+              <form (ngSubmit)="onSubmit()">
                 <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
                     <div>
-                        <label for="first-name"> First name</label>
+                        <label for="first-name"> Tên</label>
                         <input type="text" placeholder="" id="first-name" class="shadow-none with-border" [(ngModel)]="user.firstName" name="firstName">
                     </div>
                     <div>
-                        <label for="last-name"> Last name</label>
+                        <label for="last-name"> Họ</label>
                         <input type="text" placeholder="" id="last-name" class="shadow-none with-border" [(ngModel)]="user.lastName" name="lastName">
                     </div>
                     <div class="col-span-2">
@@ -40,20 +36,20 @@
                         <input type="text" placeholder="" disabled id="email" class="shadow-none with-border" [(ngModel)]="user.email" name="email">
                     </div>
                     <div>
-                        <label for="first-name"> User name</label>
+                        <label for="first-name"> Username</label>
                         <input type="text" disabled id="first-name" class="shadow-none with-border" [(ngModel)]="user.username" name="username">
                     </div>
                     <div>
-                        <label for="Location"> Gender</label>
+                        <label for="Location"> Giới tính</label>
                         <select [(ngModel)]="user.gender" name="gender" class="shadow-none with-border">
                             <option *ngFor="let gender of genders" [value]="gender.val">{{gender.name}}</option>
                         </select>
                     </div>
                     <div class="col-span-2">
-                        <label for="about">Username</label>  
+                        <label for="about">Giới thiệu bản thân</label>
                         <textarea rows="3"  class="with-border" [(ngModel)]="user.introduction" name="introduction"></textarea>
-                    </div> 
-                     
+                    </div>
+
                     <!-- Website logo  -->
                     <!-- <label for="system_info" class="font-medium">Photo  </label>
                     <div class="col-span-2 flex py-2 space-x-5">
@@ -62,7 +58,7 @@
                     </div> -->
 
                     <div class="col-span-2">
-                        <label for="Location"> Location</label>
+                        <label for="Location"> Địa chỉ</label>
                         <!-- <input type="text" placeholder="" id="location" class="shadow-none with-border" [(ngModel)]="userData.address" name="address"> -->
                         <select [(ngModel)]="user.address" name="address" class="shadow-none with-border">
                             <option *ngFor="let province of provinces" [value]="province.name">{{province.name}}</option>
@@ -72,13 +68,16 @@
                        <label for="working"> Working at</label>
                        <input type="text" placeholder="" id="working" class="shadow-none with-border">
                     </div>  -->
-                </div> 
-                
+
+                    <button class="flex items-center justify-center h-9 px-6 rounded-md bg-blue-600 text-white"
+                      type="submit">Cập Nhật Tài Khoản</button>
+                </div>
+              </form>
             </div>
         </div>
 
         <!-- Social Links-->
-        <div class="grid lg:grid-cols-3 gap-8 md:mt-12">
+        <!-- <div class="grid lg:grid-cols-3 gap-8 md:mt-12">
             <div>
                 <div uk-sticky="offset:100;bottom:true;media:992">
                     <h3 class="text-lg mb-2 font-semibold"> Social Links</h3>
@@ -86,7 +85,7 @@
                 </div>
             </div>
             <div class="bg-white rounded-md lg:shadow-md shadow col-span-2">
-                
+
                 <div class="lg:p-6 p-4 space-y-4">
                     <div>
                         <label for="facebook_link">Facebook link</label>
@@ -102,7 +101,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
     </div>

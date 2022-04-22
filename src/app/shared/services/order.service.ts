@@ -35,9 +35,9 @@ export class OrderService {
         .pipe();
   }
 
-  cancelOrder(id: string, data: any): Observable<Order[]> {
+  cancelOrder(id: string): Observable<Order[]> {
     return this.httpClient
-        .put<Order[]>(this.apiURL + '/api/order/cancel-order/' + id, JSON.stringify(data), this.httpOptions)
+        .put<Order[]>(this.apiURL + '/api/order/cancel-order/' + id, {}, this.httpOptions)
         .pipe();
   }
 

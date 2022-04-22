@@ -1,3 +1,4 @@
+import { FilterCoursesComponent } from './filter-courses/filter-courses.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CourseIntroComponent } from './course-intro/course-intro.component';
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'category', component: ListCategoriesComponent },
   { path: 'detail/:slug', component: CourseIntroComponent },
   { path: 'learn/:slug/:lecId', component: CourseLearnComponent },
+  { path: 'filter', component: FilterCoursesComponent },
 ];
 
 @NgModule({

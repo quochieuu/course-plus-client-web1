@@ -1,3 +1,4 @@
+import { Course } from './../models/course';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -32,7 +33,7 @@ export class AccountService {
   }
 
   getCurrentUser(): Observable<any> {
-    
+
     return this.httpClient
       .get<any>(this.apiURL + '/api/auth/profile', {
         headers: new HttpHeaders({
@@ -68,4 +69,58 @@ export class AccountService {
   public getUser(): any {
     return JSON.parse(sessionStorage.getItem(environment.USER_KEY) || '');
   }
+
+  updateAvatar(data: any): Observable<any[]> {
+    return this.httpClient
+        .post<any[]>(this.apiURL + '/api/auth/update-avatar/', data, {
+          headers: new HttpHeaders({
+              // 'Content-Type': 'application/json'
+              'Authorization': `Bearer ${this.currentUser.accessToken}`
+          })
+      })
+        .pipe();
+  }
+
+  listCourses(): Observable<Course[]> {
+    return this.httpClient
+        .get<Course[]>(this.apiURL + '/api/auth/list-courses', {
+          headers: new HttpHeaders({
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.currentUser.accessToken}`
+          })
+      })
+        .pipe();
+  }
+
+  updateInfor(data: any): Observable<any[]> {
+    return this.httpClient
+        .post<any[]>(this.apiURL + '/api/auth/update-information/', JSON.stringify(data), {
+          headers: new HttpHeaders({
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.currentUser.accessToken}`
+          })
+      })
+        .pipe();
+  }
+
+  requestChangePassword(): Observable<any[]> {
+    return this.httpClient
+        .post<any[]>(this.apiURL + '/api/auth/change-password', {}, {
+          headers: new HttpHeaders({
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.currentUser.accessToken}`
+          })
+      }).pipe();
+  }
+
+  resetPassword(data: any): Observable<any[]> {
+    return this.httpClient
+        .post<any[]>(this.apiURL + '/api/auth/reset-password', JSON.stringify(data), {
+          headers: new HttpHeaders({
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.currentUser.accessToken}`
+          })
+      }).pipe();
+  }
+
 }

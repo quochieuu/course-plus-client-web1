@@ -82,3 +82,61 @@ a.das-update {
     box-shadow: 3px 4px 6px 0px #222631;
     border: 1px solid #6a6a6a;
 }
+
+.das-image {
+  position: relative;
+}
+
+
+.updateAvatar {
+  width: 27px;
+  height: 27px;
+  right: 2px;
+  bottom: -5px;
+  position: absolute;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 4px;
+  padding-top: 0px;
+  border-radius: 50%;
+  color: #030a3f;
+  border: 3px solid #ccc;
+  cursor: pointer;
+}
+#updateAvatar {
+  width: 40px;
+  height: 25px;
+  right: -9px;
+  bottom: 5px;
+  position: absolute;
+  z-index: 1;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.das-image {
+  width: 120px!important;
+  height: 120px!important;
+  position: relative;
+}
+
+.submitChangeAvatar {
+  width: 27px;
+  height: 27px;
+  right: 2px;
+  bottom: -2px;
+  position: absolute;
+  background: green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 3px;
+  padding-top: 0px;
+  border-radius: 50%;
+  color: #fff;
+  border: 3px solid #ccc;
+  cursor: pointer;
+  z-index: 44;
+}

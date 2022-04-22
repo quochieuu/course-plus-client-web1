@@ -1,3 +1,4 @@
+import { FilterCoursesComponent } from './filter-courses/filter-courses.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -15,7 +16,8 @@ import { AngularToastifyModule, ToastService } from 'angular-toastify';
     ListCoursesComponent,
     ListCategoriesComponent,
     CourseIntroComponent,
-    CourseLearnComponent
+    CourseLearnComponent,
+    FilterCoursesComponent
   ],
   imports: [
     CommonModule,

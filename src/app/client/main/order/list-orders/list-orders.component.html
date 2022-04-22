@@ -3,18 +3,30 @@
 <div class="main_content">
   <div style="background-color: #7798f9; width: 70%; height: 38px; margin-top: -134px; float: right;"></div>
   <div class="container">
+
       <div class="max-w-3xl mx-auto">
-        <div *ngFor="let item of orders">
-          <div class="shadow bg-white rounded-md mt-5">
+        <h3 class="flex font-semibold items-center justify-between text-base mb-3" style="height: 30px; padding: 1.25rem;">
+          Đơn Hàng của bạn
+        </h3>
+        <div *ngFor="let item of orders; let i = index" class="wrap-order-item">
+          <div class="rounded-md mt-1">
             <h3 class="border-b flex font-semibold items-center justify-between px-7 py-4 text-base" style="height: 30px; padding: 1.25rem;">
               <div>
+                <a (click)="tabToggle(i+10001)" *ngIf="showTab != i+10001" style="font-weight: 400; cursor: pointer;"><i class="fa fa-chevron-down mr-2"></i>Hiện SP  •  </a>
+                <a (click)="tabCancel()" *ngIf="showTab == i+10001" style="font-weight: 400;cursor: pointer;"><i class="fa fa-chevron-up mr-2"></i>Ẩn SP  •   </a>
                 Đặt Ngày <span >{{ item.orderDate | date: 'dd/MM/yyyy' : 'UTC' }}</span>
               </div>
               <div *ngIf="item.orderStatus == 0">
-                Chờ thanh toán
+                <span>Chờ thanh toán</span>
+                <span> • </span>
+                <a (click)="cancelOrder(item.orderId)" style="font-weight: 400; cursor: pointer;">Huỷ</a>
+                <span> • </span>
+                <a (click)="createPayment(item.orderId)" class="text-success" style="cursor: pointer;">Thanh Toán</a>
               </div>
               <div *ngIf="item.orderStatus == 1">
                 Đã Huỷ
+                <span> • </span>
+                <a (click)="deleteOrder(item.orderId)" class="text-danger" style=" cursor: pointer;">Xoá đơn hàng</a>
               </div>
               <div *ngIf="item.orderStatus == 2">
                 Thanh toán thành công
@@ -25,10 +37,10 @@
             </h3>
 
             <div class="lg:p-8 p-3" *ngFor="let order of item.detail">
-              <div class="divide-y">
+              <div class="divide-y" *ngIf="showTab == i+10001">
                 <div class="flex items-start space-x-6 relative px-6">
 
-                    <div class="h-28 overflow-hidden relative rounded-md w-44">
+                    <div class="h-20 overflow-hidden relative rounded-md w-32">
                         <img src="{{baseUrl}}/courses/images/{{order.course.urlImage }}" alt="{{ order.course.name }}" class="absolute w-full h-full inset-0 object-cover">
                     </div>
                     <div class="flex-1 min-w-0">
@@ -47,7 +59,7 @@
             </div>
         </div>
 
-        <div class="border-t mt-5 pt-6 space-y-6">
+        <div class="border-t mt-2 pt-6 space-y-6">
 
           <div class="flex justify-between px-6">
               <div class="flex-1 min-w-0">

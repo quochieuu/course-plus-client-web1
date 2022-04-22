@@ -9,6 +9,7 @@ import { MainComponent } from './main.component';
 import { CartComponent } from './cart/cart.component';
 import { ClientAuthGuard } from 'src/app/shared/guard/client-auth.guard';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,9 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     CommonModule,
     MainRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [ClientAuthGuard]
 })
