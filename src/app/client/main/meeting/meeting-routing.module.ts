@@ -1,10 +1,11 @@
 import { MeetingRoomComponent } from './meeting-room/meeting-room.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { MeetingHomeComponent } from './meeting-home/meeting-home.component';
 
 const routes: Routes = [
-  { path: 'index', redirectTo: '', pathMatch: 'full' },
-  { path: '', component: MeetingRoomComponent }
+  { path: 'home', component: MeetingHomeComponent, pathMatch: 'full' },
+  { path: ':id', component: MeetingRoomComponent, pathMatch: 'full' },
 ];
 
 @NgModule({

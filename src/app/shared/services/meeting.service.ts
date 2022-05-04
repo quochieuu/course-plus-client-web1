@@ -1,63 +1,65 @@
+import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
-import { Message } from 'src/app/client/main/meeting/meeting-room/message';
-import { Subject } from 'rxjs';
-
-
-export const WS_ENDPOINT = environment.wsEndpoint;
 
 @Injectable({
   providedIn: 'root'
 })
 export class MeetingService {
+  private apiURL = environment.apiUrl;
+  currentUser: any;
+  httpOptions: {};
+  constructor(private httpClient: HttpClient) {
+    this.currentUser = JSON.parse(sessionStorage.getItem('auth-user') || '{}');
 
-  private socket$: WebSocketSubject<any> | undefined;
-
-  private messagesSubject = new Subject<Message>();
-  public messages$ = this.messagesSubject.asObservable();
-
-  /**
-   * Creates a new WebSocket subject and send it to the messages subject
-   * @param cfg if true the observable will be retried.
-   */
-  public connect(): void {
-
-    this.socket$ = this.getNewWebSocket();
-
-      this.socket$.subscribe(
-        // Called whenever there is a message from the server
-        msg => {
-          console.log('Received message of type: ' + msg.type);
-          this.messagesSubject.next(msg);
-        }
-      );
+    this.httpOptions = {
+        headers: new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.currentUser.accessToken}`
+        })
+    };
   }
 
-  sendMessage(msg: Message): void {
-    console.log('sending message: ' + msg.type);
-    this.socket$!.next(msg);
+  getAll(): Observable<any> {
+    return this.httpClient
+        .get<any[]>(this.apiURL + '/api/meeting/get-all', this.httpOptions)
+        .pipe();
   }
 
-  /**
-   * Return a custom WebSocket subject which reconnects after failure
-   */
-  private getNewWebSocket(): WebSocketSubject<any> {
-    return webSocket({
-      url: WS_ENDPOINT,
-      openObserver: {
-        next: () => {
-          console.log('[DataService]: connection ok');
-        }
-      },
-      closeObserver: {
-        next: () => {
-          console.log('[DataService]: connection closed');
-          this.socket$ = undefined;
-          this.connect();
-        }
-      }
-    });
+  getAllHosted(): Observable<any> {
+    return this.httpClient
+        .get<any[]>(this.apiURL + '/api/meeting/get-all-hosted', this.httpOptions)
+        .pipe();
+  }
+
+  getById(id: string): Observable<any> {
+    return this.httpClient
+        .get<any[]>(this.apiURL + '/api/meeting/get-by-id/' + id, this.httpOptions)
+        .pipe();
+  }
+
+  getByName(name: string): Observable<any> {
+    return this.httpClient
+        .get<any[]>(this.apiURL + '/api/meeting/get-by-name/' + name, this.httpOptions)
+        .pipe();
+  }
+
+  create(item: any): Observable<any> {
+    return this.httpClient
+        .post<any>(this.apiURL + '/api/meeting/create-room', JSON.stringify(item), this.httpOptions)
+        .pipe();
+  }
+
+  getPage(page: number, size: number, query: string): Observable<any> {
+    return this.httpClient
+        .get<any>(this.apiURL + '/api/meeting/filter?pageSize=' + size + '&pageIndex=' + page + '&filter=' + query, this.httpOptions)
+        .pipe();
+  }
+
+  delete(id: string) {
+    return this.httpClient
+        .delete<any>(this.apiURL + '/api/meeting/delete/' + id, this.httpOptions)
   }
 
 }

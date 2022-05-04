@@ -44,6 +44,7 @@ export class CheckoutComponent implements OnInit {
       orderName: [''],
       orderStatus: 0,
       paymentMethod: null,
+      isVnpay: 0
     });
   }
 

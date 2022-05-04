@@ -1,24 +1,7 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
-import { MeetingService } from 'src/app/shared/services/meeting.service';
-import { environment } from 'src/environments/environment';
-import { Message } from './message';
-
-
-export const ENV_RTCPeerConfiguration = environment.RTCPeerConfiguration;
-
-const mediaConstraints = {
-  audio: true,
-  video: {width: 1280, height: 720}
-  // video: {width: 1280, height: 720} // 16:9
-  // video: {width: 960, height: 540}  // 16:9
-  // video: {width: 640, height: 480}  //  4:3
-  // video: {width: 160, height: 120}  //  4:3
-};
-
-const offerOptions = {
-  offerToReceiveAudio: true,
-  offerToReceiveVideo: true
-};
+import { AccountService } from 'src/app/shared/services/account.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+declare var JitsiMeetExternalAPI: any;
 
 @Component({
   selector: 'meeting-room-chat',
@@ -29,260 +12,140 @@ const offerOptions = {
     './../../../../../assets/client/assets/css/tailwind.css',
     './meeting-room.component.scss']
 })
-export class MeetingRoomComponent implements AfterViewInit {
+export class MeetingRoomComponent implements OnInit {
 
-  @ViewChild('local_video') localVideo!: ElementRef;
-  @ViewChild('received_video') remoteVideo!: ElementRef;
+  domain: string = "meet.jit.si"; // For self hosted use your domain
+    room: any;
+    options: any;
+    api: any;
+    user: any;
+    cur_user: any;
+    fullName!: string;
+    roomCode!: string;
 
-  private peerConnection!: RTCPeerConnection;
 
-  private localStream!: MediaStream;
+    // For Custom Controls
+    isAudioMuted = false;
+    isVideoMuted = false;
 
-  inCall = false;
-  localVideoActive = false;
-
-
-  constructor(private dataService: MeetingService) { }
-
-  async call(): Promise<void> {
-    this.createPeerConnection();
-
-    // Add the tracks from the local stream to the RTCPeerConnection
-    this.localStream.getTracks().forEach(
-      track => this.peerConnection.addTrack(track, this.localStream)
-    );
-
-    try {
-      const offer: RTCSessionDescriptionInit = await this.peerConnection.createOffer(offerOptions);
-      // Establish the offer as the local peer's current description.
-      await this.peerConnection.setLocalDescription(offer);
-
-      this.inCall = true;
-
-      this.dataService.sendMessage({type: 'offer', data: offer});
-    } catch (err: any) {
-      this.handleGetUserMediaError(err);
+    constructor(
+        private router: Router,
+        private accountService: AccountService,
+        private route: ActivatedRoute,
+    ) {
+      this.roomCode = this.route.snapshot.params['id'];
     }
-  }
 
-  hangUp(): void {
-    this.dataService.sendMessage({type: 'hangup', data: ''});
-    this.closeVideoCall();
-  }
+    getUser = () =>{
+      this.accountService
+        .getCurrentUser()
+        .subscribe((data: any) => {
+          this.cur_user = data;
+          this.fullName = data.fullName;
 
-  ngAfterViewInit(): void {
-    this.addIncominMessageHandler();
-    this.requestMediaDevices();
-  }
+          this.createMeeting();
+        });
+    }
 
-  private addIncominMessageHandler(): void {
-    this.dataService.connect();
+    ngOnInit(): void {
+      this.getUser();
 
-    // this.transactions$.subscribe();
-    this.dataService.messages$.subscribe(
-      msg => {
-        // console.log('Received message: ' + msg.type);
-        switch (msg.type) {
-          case 'offer':
-            this.handleOfferMessage(msg.data);
-            break;
-          case 'answer':
-            this.handleAnswerMessage(msg.data);
-            break;
-          case 'hangup':
-            this.handleHangupMessage(msg);
-            break;
-          case 'ice-candidate':
-            this.handleICECandidateMessage(msg.data);
-            break;
-          default:
-            console.log('unknown message of type ' + msg.type);
+
+    }
+
+    createMeeting = () => {
+      this.room = this.roomCode;
+        this.user = {
+          name: this.fullName
         }
-      },
-      error => console.log(error)
-    );
-  }
 
-  /* ########################  MESSAGE HANDLER  ################################## */
+        this.options = {
+            roomName: this.room,
+            width: '98%',
+            height: 600,
+            configOverwrite: { prejoinPageEnabled: false },
+            interfaceConfigOverwrite: {
+              SHOW_JITSI_WATERMARK: false,
+              SHOW_WATERMARK_FOR_GUESTS: false
+            },
+            parentNode: document.querySelector('#jitsi-iframe'),
+            userInfo: {
+                displayName: this.fullName
+            }
+        }
 
-  private handleOfferMessage(msg: RTCSessionDescriptionInit): void {
-    console.log('handle incoming offer');
-    if (!this.peerConnection) {
-      this.createPeerConnection();
+        this.api = new JitsiMeetExternalAPI(this.domain, this.options);
+
+         // Event handlers
+        this.api.addEventListeners({
+            readyToClose: this.handleClose,
+            participantLeft: this.handleParticipantLeft,
+            participantJoined: this.handleParticipantJoined,
+            videoConferenceJoined: this.handleVideoConferenceJoined,
+            videoConferenceLeft: this.handleVideoConferenceLeft,
+            audioMuteStatusChanged: this.handleMuteStatus,
+            videoMuteStatusChanged: this.handleVideoStatus
+        });
     }
 
-    if (!this.localStream) {
-      this.startLocalVideo();
+
+
+    handleClose = () => {
+      console.log("handleClose");
     }
 
-    this.peerConnection.setRemoteDescription(new RTCSessionDescription(msg))
-      .then(() => {
 
-        // add media stream to local video
-        this.localVideo.nativeElement.srcObject = this.localStream;
-
-        // add media tracks to remote connection
-        this.localStream.getTracks().forEach(
-          track => this.peerConnection.addTrack(track, this.localStream)
-        );
-
-      }).then(() => {
-
-      // Build SDP for answer message
-      return this.peerConnection.createAnswer();
-
-    }).then((answer) => {
-
-      // Set local SDP
-      return this.peerConnection.setLocalDescription(answer);
-
-    }).then(() => {
-
-      // Send local SDP to remote party
-      this.dataService.sendMessage({type: 'answer', data: this.peerConnection.localDescription});
-
-      this.inCall = true;
-
-    }).catch(this.handleGetUserMediaError);
+  handleParticipantLeft = async (participant: any) => {
+      console.log("handleParticipantLeft", participant); // { id: "2baa184e" }
+      const data = await this.getParticipants();
   }
 
-  private handleAnswerMessage(msg: RTCSessionDescriptionInit): void {
-    console.log('handle incoming answer');
-    this.peerConnection.setRemoteDescription(msg);
+  handleParticipantJoined = async (participant: any) => {
+      console.log("handleParticipantJoined", participant); // { id: "2baa184e", displayName: "Shanu Verma", formattedDisplayName: "Shanu Verma" }
+      const data = await this.getParticipants();
   }
 
-  private handleHangupMessage(msg: Message): void {
-    console.log(msg);
-    this.closeVideoCall();
+  handleVideoConferenceJoined = async (participant: any) => {
+      console.log("handleVideoConferenceJoined", participant); // { roomName: "bwb-bfqi-vmh", id: "8c35a951", displayName: "Akash Verma", formattedDisplayName: "Akash Verma (me)"}
+      const data = await this.getParticipants();
   }
 
-  private handleICECandidateMessage(msg: RTCIceCandidate): void {
-    const candidate = new RTCIceCandidate(msg);
-    this.peerConnection.addIceCandidate(candidate).catch(this.reportError);
+  handleVideoConferenceLeft = () => {
+      console.log("handleVideoConferenceLeft");
+      this.router.navigate(['/thank-you']);
   }
 
-  private async requestMediaDevices(): Promise<void> {
-    try {
-      this.localStream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-      // pause all tracks
-      this.pauseLocalVideo();
-    } catch (e: any) {
-      console.error(e);
-      alert(`getUserMedia() error: ${e.name}`);
-    }
+  handleMuteStatus = (audio: any) => {
+      console.log("handleMuteStatus", audio); // { muted: true }
   }
 
-  startLocalVideo(): void {
-    console.log('starting local stream');
-    this.localStream.getTracks().forEach(track => {
-      track.enabled = true;
-    });
-    this.localVideo.nativeElement.srcObject = this.localStream;
-
-    this.localVideoActive = true;
+  handleVideoStatus = (video: any) => {
+      console.log("handleVideoStatus", video); // { muted: true }
   }
 
-  pauseLocalVideo(): void {
-    console.log('pause local stream');
-    this.localStream.getTracks().forEach(track => {
-      track.enabled = false;
-    });
-    this.localVideo.nativeElement.srcObject = undefined;
-
-    this.localVideoActive = false;
-  }
-
-  private createPeerConnection(): void {
-    console.log('creating PeerConnection...');
-    this.peerConnection = new RTCPeerConnection(ENV_RTCPeerConfiguration);
-
-    this.peerConnection.onicecandidate = this.handleICECandidateEvent;
-    this.peerConnection.oniceconnectionstatechange = this.handleICEConnectionStateChangeEvent;
-    this.peerConnection.onsignalingstatechange = this.handleSignalingStateChangeEvent;
-    this.peerConnection.ontrack = this.handleTrackEvent;
-  }
-
-  private closeVideoCall(): void {
-    console.log('Closing call');
-
-    if (this.peerConnection) {
-      console.log('--> Closing the peer connection');
-
-      this.peerConnection.ontrack = null;
-      this.peerConnection.onicecandidate = null;
-      this.peerConnection.oniceconnectionstatechange = null;
-      this.peerConnection.onsignalingstatechange = null;
-
-      // Stop all transceivers on the connection
-      this.peerConnection.getTransceivers().forEach(transceiver => {
-        transceiver.stop();
+  getParticipants() {
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+              resolve(this.api.getParticipantsInfo()); // get all participants
+          }, 500)
       });
+  }
+  executeCommand(command: string) {
+    this.api.executeCommand(command);;
+    if(command == 'hangup') {
+        this.router.navigate(['/thank-you']);
+        return;
+    }
 
-      // Close the peer connection
-      this.peerConnection.close();
-    //   this.peerConnection = null;
+    if(command == 'toggleAudio') {
+        this.isAudioMuted = !this.isAudioMuted;
+    }
 
-      this.inCall = false;
+    if(command == 'toggleVideo') {
+        this.isVideoMuted = !this.isVideoMuted;
     }
   }
 
-  /* ########################  ERROR HANDLER  ################################## */
-  private handleGetUserMediaError(e: Error): void {
-    switch (e.name) {
-      case 'NotFoundError':
-        alert('Unable to open your call because no camera and/or microphone were found.');
-        break;
-      case 'SecurityError':
-      case 'PermissionDeniedError':
-        // Do nothing; this is the same as the user canceling the call.
-        break;
-      default:
-        console.log(e);
-        alert('Error opening your camera and/or microphone: ' + e.message);
-        break;
-    }
 
-    this.closeVideoCall();
-  }
 
-  private reportError = (e: Error) => {
-    console.log('got Error: ' + e.name);
-    console.log(e);
-  }
-
-  /* ########################  EVENT HANDLER  ################################## */
-  private handleICECandidateEvent = (event: RTCPeerConnectionIceEvent) => {
-    console.log(event);
-    if (event.candidate) {
-      this.dataService.sendMessage({
-        type: 'ice-candidate',
-        data: event.candidate
-      });
-    }
-  }
-
-  private handleICEConnectionStateChangeEvent = (event: Event) => {
-    console.log(event);
-    switch (this.peerConnection.iceConnectionState) {
-      case 'closed':
-      case 'failed':
-      case 'disconnected':
-        this.closeVideoCall();
-        break;
-    }
-  }
-
-  private handleSignalingStateChangeEvent = (event: Event) => {
-    console.log(event);
-    switch (this.peerConnection.signalingState) {
-      case 'closed':
-        this.closeVideoCall();
-        break;
-    }
-  }
-
-  private handleTrackEvent = (event: RTCTrackEvent) => {
-    console.log(event);
-    this.remoteVideo.nativeElement.srcObject = event.streams[0];
-  }
 }

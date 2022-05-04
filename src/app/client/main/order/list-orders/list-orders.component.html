@@ -29,7 +29,8 @@
                 <a (click)="deleteOrder(item.orderId)" class="text-danger" style=" cursor: pointer;">Xoá đơn hàng</a>
               </div>
               <div *ngIf="item.orderStatus == 2">
-                Thanh toán thành công
+                Thanh toán thành công <span> • </span>
+                <a (click)="deleteOrder(item.orderId)" class="text-danger" style=" cursor: pointer;">Xoá đơn hàng</a>
               </div>
               <div *ngIf="item.orderStatus == 3">
                 Thanh toán thất bại

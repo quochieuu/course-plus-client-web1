@@ -386,9 +386,15 @@
                         <li *ngIf="userData != null">
                           <a routerLink="/profile/wishlist">
                               <i name="settings-outline" class="is-icon"></i>
-                              Khoá học đã lưu
+                              Khoá Học Đã Lưu
                           </a>
                       </li>
+                      <li *ngIf="userData != null">
+                        <a routerLink="/forum/my-questions">
+                            <i name="settings-outline" class="is-icon"></i>
+                            Câu Hỏi Trên Diễn Đàn
+                        </a>
+                    </li>
                         <li *ngIf="userData != null">
                           <a routerLink="/profile/change-password">
                               <i name="settings-outline" class="is-icon"></i>

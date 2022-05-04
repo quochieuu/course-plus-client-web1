@@ -17,6 +17,9 @@ const routes: Routes = [
   { path: 'book-category', loadChildren: () => import('./book-category/book-category.module').then(m => m.BookCategoryModule) },
   { path: 'quiz', loadChildren: () => import('./quiz/quiz.module').then(m => m.QuizModule) },
   { path: 'systems', loadChildren: () => import('./systems/systems.module').then(m => m.SystemsModule) },
+  { path: 'chat-bot', loadChildren: () => import('./chat-bot/chat-bot.module').then(m => m.ChatBotModule) },
+  { path: 'forum-category', loadChildren: () => import('./forum-category/forum-category.module').then(m => m.ForumCategoryModule) },
+  { path: 'forum', loadChildren: () => import('./forum/forum.module').then(m => m.ForumModule) },
   { path: 'user', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
 
 ];
